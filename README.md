@@ -9,7 +9,7 @@ To maintain CLIP's OOD generalizability when adapting CLIP to downstream tasks, 
 - State-of-the-art performance on **three OOD settings**.
 
 <p align="center">
-<img src=".\fig\overview.png" height = "200" alt="" align=center />
+<img src=".\figs\overview.png" height = "200" alt="" align=center />
 <br><br>
 <b>Figure 1.</b> Overview of CLIPood.
 </p>
