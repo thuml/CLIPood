@@ -71,7 +71,7 @@ If you find this repo useful, please cite our paper.
 
 ```plain
 @inproceedings{shu2023CLIPood,
-  title={CLIPood: Generalizing CLIP to Out-of-Distributions },
+  title={CLIPood: Generalizing CLIP to Out-of-Distributions},
   author={Yang Shu and Xingzhuo Guo and Jialong Wu and Ximei Wang and Jianmin Wang and Mingsheng Long},
   booktitle={International Conference on Machine Learning},
   year={2023}
