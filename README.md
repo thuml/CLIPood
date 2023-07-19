@@ -60,6 +60,8 @@ augment_transform = transforms.Compose([
 ])
 ```
 
+This aims to align the data pre-processing with the CLIP model.
+
 4. Train and evaluate model.
 
 ## Results
