@@ -57,37 +57,38 @@ def main(args: argparse.Namespace):
 
     bma_classifier = GeneralMovingAverage(classifier, weight_func)
 
-    # define optimizer and lr scheduler
-    optimizer = AdamW(classifier.parameters(), lr=args.lr, weight_decay=args.wd)
-    lr_scheduler = CosineAnnealingLR(optimizer, args.epochs * args.iters_per_epoch)
-    
-    # define temperature for training
-    if args.temperature is None:
-        args.temperature = clip_model.logit_scale.exp().item()
-
-    # define tensorboard writer
-    writer = TensorboardWriter(args.log, flush_freq=20)
-
-    # evaluate zero-shot performance
-    best_val_acc1 = evaluate_all(classifier, val_loader, train_text_features, test_loaders, args, writer, device)
-
-    # start training
-    for epoch in range(args.epochs):
-        print(f"Learning rate: {lr_scheduler.get_lr()}")
+    if args.phase == "train":
+        # define optimizer and lr scheduler
+        optimizer = AdamW(classifier.parameters(), lr=args.lr, weight_decay=args.wd)
+        lr_scheduler = CosineAnnealingLR(optimizer, args.epochs * args.iters_per_epoch)
         
-        # train for one epoch
-        train(train_iter, classifier, bma_classifier, train_text_features, optimizer, lr_scheduler, epoch, args, writer, device)
+        # define temperature for training
+        if args.temperature is None:
+            args.temperature = clip_model.logit_scale.exp().item()
 
-        # evaluate all
-        val_acc1 = evaluate_all(classifier, val_loader, train_text_features, test_loaders, args, writer, device)
+        # define tensorboard writer
+        writer = TensorboardWriter(args.log, flush_freq=20)
 
-        # remember best acc@1 and save checkpoint
-        torch.save(classifier.state_dict(), logger.get_checkpoint_path('latest'))
-        if val_acc1 > best_val_acc1:
-            shutil.copy(logger.get_checkpoint_path('latest'), logger.get_checkpoint_path('best'))
-            best_val_acc1 = val_acc1
+        # evaluate zero-shot performance
+        best_val_acc1 = evaluate_all(classifier, val_loader, train_text_features, test_loaders, args, writer, device)
 
-    print("Training completed.")
+        # start training
+        for epoch in range(args.epochs):
+            print(f"Learning rate: {lr_scheduler.get_lr()}")
+            
+            # train for one epoch
+            train(train_iter, classifier, bma_classifier, train_text_features, optimizer, lr_scheduler, epoch, args, writer, device)
+
+            # evaluate all
+            val_acc1 = evaluate_all(classifier, val_loader, train_text_features, test_loaders, args, writer, device)
+
+            # remember best acc@1 and save checkpoint
+            torch.save(classifier.state_dict(), logger.get_checkpoint_path('latest'))
+            if val_acc1 > best_val_acc1:
+                shutil.copy(logger.get_checkpoint_path('latest'), logger.get_checkpoint_path('best'))
+                best_val_acc1 = val_acc1
+
+        print("Training completed.")
 
     classifier.load_state_dict(torch.load(logger.get_checkpoint_path('best')))
     print("Evaluate best model:")
@@ -108,6 +109,8 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--data', metavar='DATA', default='DomainNet')
     parser.add_argument('--task', default='domain_shift', choices=
                         ['domain_shift', 'open_class', 'in_the_wild'])
+    parser.add_argument('--targets', nargs='+', type=int, default=None,
+                        help='target domain(s) (DomainBed datasets only)')
     parser.add_argument('--n-shot', type=int, default=0)
     # model parameters
     parser.add_argument('-a', '--arch', metavar='ARCH', default='ViT-B/16')
@@ -129,8 +132,10 @@ if __name__ == '__main__':
                         metavar='N', help='print frequency (default: 100)')
     parser.add_argument('--seed', default=0, type=int,
                         help='seed for initializing training. ')
-    parser.add_argument("--log", type=str, default='exp0',
+    parser.add_argument('--log', type=str, default='exp0',
                         help="Where to save logs, checkpoints and debugging images.")
+    parser.add_argument('--phase', type=str, default='train', choices=['train', 'test'],
+                        help="When phase is 'test', only test the model.")
     # parameters for CLIPood
     parser.add_argument('--temperature', type=float, default=None, help=
                         "Use CLIP's original temperature in default.")
