@@ -62,7 +62,7 @@ augment_transform = transforms.Compose([
 
 This aims to align the data pre-processing with the CLIP model.
 
-4. Train and evaluate model.
+4. Train and evaluate model. We provide all training configs in `scripts.py` to reproduce our main results. You can also tune them or experiment on your own dataset.
 
 ## Results
 
