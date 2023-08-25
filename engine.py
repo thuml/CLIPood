@@ -161,7 +161,7 @@ def train(train_iter: ForeverDataIterator, model, moving_avg_model: GeneralMovin
         # compute output
         f = model(x)
         f = f / f.norm(dim=-1, keepdim=True)
-        f -= args.alpha * text_features[labels]
+        f -= args.lambda * text_features[labels]
         y = f @ text_features.T
         y = args.temperature * y
 
