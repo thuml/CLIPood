@@ -119,6 +119,7 @@ def get_text_features(clip_model, template, class_names, device):
             for c in class_names]).to(device)
         text_features = clip_model.encode_text(texts)
         text_features /= text_features.norm(dim=-1, keepdim=True)
+    return text_features
 
 
 def convert_models_to_fp32(model):
@@ -145,7 +146,8 @@ def train(train_iter: ForeverDataIterator, model, moving_avg_model: GeneralMovin
     end = time.time()
     for i in range(args.iters_per_epoch):
         # obtain data
-        if args.tasks in ["domain_shift", "in_the_wild"]:
+        if args.task in ["domain_shift", "in_the_wild"]:
+            x, labels = [], []
             for x_d, labels_d in next(train_iter):
                 x.append(x_d)
                 labels.append(labels_d)
@@ -161,7 +163,7 @@ def train(train_iter: ForeverDataIterator, model, moving_avg_model: GeneralMovin
         # compute output
         f = model(x)
         f = f / f.norm(dim=-1, keepdim=True)
-        f -= args.lambda * text_features[labels]
+        f -= args.lam * text_features[labels]
         y = f @ text_features.T
         y = args.temperature * y
 

@@ -74,7 +74,7 @@ def main(args: argparse.Namespace):
 
         # start training
         for epoch in range(args.epochs):
-            print(f"Learning rate: {lr_scheduler.get_lr()}")
+            print("Learning rate: {:.4e}".format(lr_scheduler.get_last_lr()[0]))
             
             # train for one epoch
             train(train_iter, classifier, bma_classifier, train_text_features, optimizer, lr_scheduler, epoch, args, writer, device)
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # parameters for CLIPood
     parser.add_argument('--temperature', type=float, default=None, help=
                         "Use CLIP's original temperature in default.")
-    parser.add_argument('--lambda', type=float, default=0.3)
+    parser.add_argument('--lam', type=float, default=0.3)
     parser.add_argument('--beta', type=float, default=0.5)
 
     args = parser.parse_args()
