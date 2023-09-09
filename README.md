@@ -9,7 +9,7 @@ To maintain CLIP's OOD generalizability when adapting CLIP to downstream tasks, 
 - State-of-the-art performance on **three OOD settings**.
 
 <p align="center">
-<img src=".\fig\overview.png" height = "200" alt="" align=center />
+<img src=".\figs\overview.png" height = "320" alt="" align=center />
 <br><br>
 <b>Figure 1.</b> Overview of CLIPood.
 </p>
@@ -60,7 +60,9 @@ augment_transform = transforms.Compose([
 ])
 ```
 
-4. Train and evaluate model.
+This aims to align the data pre-processing with the CLIP model.
+
+4. Train and evaluate model. We provide all training configs in `scripts.py` to reproduce our main results. You can also tune them or experiment on your own dataset.
 
 ## Results
 
@@ -71,7 +73,7 @@ If you find this repo useful, please cite our paper.
 
 ```plain
 @inproceedings{shu2023CLIPood,
-  title={CLIPood: Generalizing CLIP to Out-of-Distributions },
+  title={CLIPood: Generalizing CLIP to Out-of-Distributions},
   author={Yang Shu and Xingzhuo Guo and Jialong Wu and Ximei Wang and Jianmin Wang and Mingsheng Long},
   booktitle={International Conference on Machine Learning},
   year={2023}
