@@ -16,7 +16,7 @@ To maintain CLIP's OOD generalizability when adapting CLIP to downstream tasks, 
 
 ## Get Started
 
-1. Install [Pytorch](https://pytorch.org/) and [CLIP](https://github.com/openai/CLIP). Then add
+1. **(Updated)** Install [Pytorch](https://pytorch.org/) and [CLIP](https://github.com/openai/CLIP). Then add
 ```python
 x = x.type(self.conv1.weight.dtype)
 ```
