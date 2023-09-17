@@ -16,13 +16,13 @@ To maintain CLIP's OOD generalizability when adapting CLIP to downstream tasks, 
 
 ## Get Started
 
-1. Install Python 3.8. For convenience, execute the following command.
-
-```bash
-pip install -r requirements.txt
+1. Install [Pytorch](https://pytorch.org/) and [CLIP](https://github.com/openai/CLIP). Then add
+```python
+x = x.type(self.conv1.weight.dtype)
 ```
+between Line 223-224 of `CLIP/clip/models.py`. About this modification please refer to [this issue](https://github.com/openai/CLIP/issues/386)
 
-2. Prepare Data. Our datasets are built over [DomainBed](https://github.com/facebookresearch/DomainBed) and [CoOp](https://github.com/KaiyangZhou/CoOp) codebases. For usage, one should clone the above two repositories, then download data following the instructions, and arrange the folder as:
+3. Prepare Data. Our datasets are built over [DomainBed](https://github.com/facebookresearch/DomainBed) and [CoOp](https://github.com/KaiyangZhou/CoOp) codebases. For usage, one should clone the above two repositories, then download data following the instructions, and arrange the folder as:
 ```plain
 CLIPood/
 |-- CoOp/
